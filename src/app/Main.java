@@ -1,14 +1,18 @@
 package app;
 
-import io.LeitorDeArquivo;
+import controller.Operador;
 
 import java.io.FileNotFoundException;
 
 public class Main {
     static void main(String[] args) throws FileNotFoundException {
-        String path = "formulario.txt";
 
-        LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
-        leitorDeArquivo.ler(path);
+
+//        MenuPrincipal menuPrincipal = new MenuPrincipal();
+//        menuPrincipal.mostrar();
+
+        Operador op =new Operador();
+        op.cadastrar();
+
     }
 }
