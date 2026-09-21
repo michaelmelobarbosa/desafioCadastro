@@ -1,7 +1,0 @@
-1: bentinho doidinho
-2 - gato
-3 - macho
-4 - [9, 73, quixada]
-5 - 5.0
-6 - 5.0
-7 - siames

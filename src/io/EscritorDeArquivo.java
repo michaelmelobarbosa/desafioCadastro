@@ -7,32 +7,31 @@ import model.Pet;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EscritorDeArquivo {
-    String path = "petsCadastrados/out.txt";
 
-
-    public void escrever(Pet pet) {
+    public void escrever(Pet pet, String path) {
         List<String> petLista = petParaLista(pet);
-        
+
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))) {
-            bufferedWriter.write("1: " + petLista.getFirst() + " "+ petLista.get(1));
+            bufferedWriter.write("1 - " + petLista.getFirst() + " " + petLista.get(1));
             bufferedWriter.newLine();
 
             for (int i = 2; i < petLista.size(); i++) {
                 bufferedWriter.write((i) + " - " + petLista.get(i));
                 bufferedWriter.newLine();
             }
-            
+
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
     public List<String> petParaLista(Pet pet) {
-
 
         List<String> listaPet = new ArrayList<>();
         listaPet.add(pet.getNome());
@@ -42,7 +41,6 @@ public class EscritorDeArquivo {
         } else if (pet.getTipo() == Tipo.GATO) {
             listaPet.add("gato");
         }
-
 
         if (pet.getSexo() == Sexo.MACHO) {
             listaPet.add("macho");
@@ -58,4 +56,8 @@ public class EscritorDeArquivo {
         return listaPet;
     }
 
+    public String outputFormatter(Pet pet) {
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmm"));
+        return "petsCadastrados/" + date + "-" + pet.getNome().toUpperCase() + pet.getSobrenome().toUpperCase() + ".TXT";
+    }
 }

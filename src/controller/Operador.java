@@ -29,11 +29,11 @@ public class Operador {
 
         System.out.print("2: ");
         String tipo = sc.next();
-        if(tipo.equalsIgnoreCase("cachorro")){
+        if (tipo.equalsIgnoreCase("cachorro")) {
             pet.setTipo(Tipo.CACHORRO);
         } else if (tipo.equalsIgnoreCase("gato")) {
             pet.setTipo(Tipo.GATO);
-        }else{
+        } else {
             System.out.println("Tipo indefinido");
         }
 
@@ -42,7 +42,8 @@ public class Operador {
 
         if (sexo.equalsIgnoreCase("macho")) {
             pet.setSexo(Sexo.MACHO);
-        } else if (sexo.equalsIgnoreCase("fêmea")) {
+        } else if (sexo.equalsIgnoreCase("femea") ||
+                sexo.equalsIgnoreCase("fêmea")) {
             pet.setSexo(Sexo.FEMEA);
         } else {
             System.out.println("Sexo indefinido");
@@ -66,6 +67,8 @@ public class Operador {
         System.out.print("7: ");
         pet.setRaca(sc.next());
 
-        escritorDeArquivo.escrever(pet);
+        String path = escritorDeArquivo.outputFormatter(pet);
+
+        escritorDeArquivo.escrever(pet, path);
     }
 }
