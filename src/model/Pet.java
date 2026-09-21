@@ -3,10 +3,8 @@ package model;
 import enums.Sexo;
 import enums.Tipo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.SequencedCollection;
 
 public class Pet {
     private String nome;
@@ -17,7 +15,6 @@ public class Pet {
     private Double idade;
     private Double peso;
     private String raca;
-
 
 
     public String getNome() {
@@ -52,8 +49,15 @@ public class Pet {
         this.sexo = sexo;
     }
 
-    public List<String> getEndereco() {
+    public List<String> getEnderecoComoLista() {
+        if (endereco == null) {
+            return List.of("Não contem elementos");
+        }
         return List.of(endereco.getRua(), endereco.getNumero(), endereco.getCidade());
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
     }
 
     public void setEndereco(Endereco endereco) {
@@ -85,7 +89,8 @@ public class Pet {
     }
 
     @Override
-    public boolean equals(Object o) {        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
         return Objects.equals(nome, pet.nome) && Objects.equals(idade, pet.idade) && Objects.equals(raca, pet.raca);
     }
@@ -95,8 +100,4 @@ public class Pet {
         return Objects.hash(nome, idade, raca);
     }
 
-    public void setEndereco(String rua, String numero, String cidade) {
-
-        this.endereco = new Endereco(rua, numero, cidade);
-    }
 }

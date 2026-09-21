@@ -1,6 +1,7 @@
 package controller;
 
 import enums.Sexo;
+import enums.Tipo;
 import io.EscritorDeArquivo;
 import io.LeitorDeArquivo;
 import model.Endereco;
@@ -11,21 +12,30 @@ import java.util.Scanner;
 
 public class Operador {
     String path = "formulario.txt";
-    Endereco endereco = new Endereco();
     Scanner sc = new Scanner(System.in);
     EscritorDeArquivo escritorDeArquivo = new EscritorDeArquivo();
 
 
     public void cadastrar() throws FileNotFoundException {
+        Endereco endereco = new Endereco();
+        Pet pet = new Pet();
+
         LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
         leitorDeArquivo.ler(path);
-        Pet pet = new Pet();
 
         System.out.print("1: ");
         pet.setNome(sc.next());
+        pet.setSobrenome(sc.next());
 
         System.out.print("2: ");
-        pet.setSobrenome(sc.next());
+        String tipo = sc.next();
+        if(tipo.equalsIgnoreCase("cachorro")){
+            pet.setTipo(Tipo.CACHORRO);
+        } else if (tipo.equalsIgnoreCase("gato")) {
+            pet.setTipo(Tipo.GATO);
+        }else{
+            System.out.println("Tipo indefinido");
+        }
 
         System.out.print("3: ");
         String sexo = sc.next();
@@ -41,14 +51,12 @@ public class Operador {
         System.out.println("4: ");
         System.out.print("Rua: ");
         endereco.setRua(sc.next());
-        String rua = endereco.getRua();
         System.out.print("Número: ");
         endereco.setNumero(sc.next());
-        String numero = endereco.getRua();
         System.out.print("Cidade: ");
         endereco.setCidade(sc.next());
-        String cidade = endereco.getCidade();
-        pet.setEndereco(rua, numero, cidade);
+        pet.setEndereco(endereco);
+
         System.out.print("5: ");
         pet.setIdade(sc.nextDouble());
 

@@ -2,7 +2,6 @@ package io;
 
 import enums.Sexo;
 import enums.Tipo;
-import model.Endereco;
 import model.Pet;
 
 import java.io.BufferedWriter;
@@ -19,8 +18,11 @@ public class EscritorDeArquivo {
         List<String> petLista = petParaLista(pet);
         
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path))) {
-            for (int i = 1; i <= petLista.size(); i++) {
-                bufferedWriter.write(i + " - " + petLista.get(i));
+            bufferedWriter.write("1: " + petLista.getFirst() + " "+ petLista.get(1));
+            bufferedWriter.newLine();
+
+            for (int i = 2; i < petLista.size(); i++) {
+                bufferedWriter.write((i) + " - " + petLista.get(i));
                 bufferedWriter.newLine();
             }
             
@@ -48,7 +50,7 @@ public class EscritorDeArquivo {
             listaPet.add("fêmea");
         }
 
-        listaPet.add(pet.getEndereco().toString());
+        listaPet.add(pet.getEnderecoComoLista().toString());
         listaPet.add(String.valueOf(pet.getIdade()));
         listaPet.add(String.valueOf(pet.getPeso()));
         listaPet.add(pet.getRaca());

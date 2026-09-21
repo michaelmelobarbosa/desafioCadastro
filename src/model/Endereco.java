@@ -6,9 +6,12 @@ public class Endereco {
     private String rua;
 
     public Endereco(String rua, String numero, String cidade) {
-
+       this.rua = rua;
+       this.numero = numero;
+       this.cidade = cidade;
     }
 
+    public Endereco(){}
 
     public String getNumero() {
         return numero;
