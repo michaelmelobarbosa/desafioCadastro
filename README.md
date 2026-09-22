@@ -29,7 +29,7 @@ O sistema deve ser implementado utilizando conceitos de Orientação a Objetos e
 ## Conhecimentos que você irá aplicar:
 - Orientação a Objetos (OO)
 - Manipulação de arquivos e arrays
-- Java IO
+- Java io
 - Exceções
 - Boas práticas de código
 - File Systems
