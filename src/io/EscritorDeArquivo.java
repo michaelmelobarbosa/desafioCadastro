@@ -48,7 +48,7 @@ public class EscritorDeArquivo {
             listaPet.add("fêmea");
         }
 
-        listaPet.add(pet.getEnderecoComoLista().toString());
+        listaPet.add(String.join(", ", pet.getEnderecoComoLista()));
         listaPet.add(String.valueOf(pet.getIdade()));
         listaPet.add(String.valueOf(pet.getPeso()));
         listaPet.add(pet.getRaca());

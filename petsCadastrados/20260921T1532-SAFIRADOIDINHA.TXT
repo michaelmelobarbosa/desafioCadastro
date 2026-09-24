@@ -1,7 +1,7 @@
-1: safira doidinha
+1 - safira doidinha da silva
 2 - gato
 3 - fêmea
-4 - [73, 9, quixada]
+4 - 73, 9, quixada
 5 - 5.0
 6 - 5.0
 7 - indefinido

@@ -7,21 +7,22 @@ import io.LeitorDeArquivo;
 import model.Endereco;
 import model.Pet;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Operador {
     String path = "formulario.txt";
     Scanner sc = new Scanner(System.in);
     EscritorDeArquivo escritorDeArquivo = new EscritorDeArquivo();
+    LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
 
 
     public void cadastrar() throws FileNotFoundException {
         Endereco endereco = new Endereco();
         Pet pet = new Pet();
-
-        LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
-        leitorDeArquivo.ler(path);
 
         System.out.print("1: ");
         pet.setNome(sc.next());
@@ -70,5 +71,19 @@ public class Operador {
         String path = escritorDeArquivo.outputFormatter(pet);
 
         escritorDeArquivo.escrever(pet, path);
+    }
+
+    public void listarPets() {
+        var pathsOfPets = leitorDeArquivo.listOfPaths();
+        List<String> listOfPets = new ArrayList<>();
+
+        for (int i = 0; i < pathsOfPets.size(); i++) {
+            List<String> petRaw = leitorDeArquivo.fileToString(pathsOfPets.get(i));
+            String petFormated = leitorDeArquivo.listOfPetsOutput(petRaw);
+            listOfPets.add(petFormated);
+            System.out.println(i + ". " + listOfPets.get(i));
+        }
+
+
     }
 }
