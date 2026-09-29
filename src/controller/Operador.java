@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Operador {
     String path = "formulario.txt";
@@ -73,17 +74,24 @@ public class Operador {
         escritorDeArquivo.escrever(pet, path);
     }
 
-    public void listarPets() {
+    public List<String> listarPets() {
         var pathsOfPets = leitorDeArquivo.listOfPaths();
         List<String> listOfPets = new ArrayList<>();
 
-        for (int i = 0; i < pathsOfPets.size(); i++) {
-            List<String> petRaw = leitorDeArquivo.fileToString(pathsOfPets.get(i));
+        for (String pathsOfPet : pathsOfPets) {
+            List<String> petRaw = leitorDeArquivo.fileToString(pathsOfPet);
             String petFormated = leitorDeArquivo.listOfPetsOutput(petRaw);
             listOfPets.add(petFormated);
-            System.out.println(i + ". " + listOfPets.get(i));
         }
 
+        return listOfPets;
+    }
 
+    public void printPets() {
+        List<String> pets = listarPets();
+
+        for (int i = 0; i < pets.size(); i++) {
+            System.out.println((i + 1) + " - " + pets.get(i));
+        }
     }
 }

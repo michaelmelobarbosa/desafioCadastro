@@ -69,8 +69,10 @@ public class LeitorDeArquivo {
         File path = new File(strPath);
         File[] files = path.listFiles();
         List<String> listOfPaths = new ArrayList<>();
-        for (File file : files) {
-            listOfPaths.add(file.toString());
+        if (files != null) {
+            for (File file : files) {
+                listOfPaths.add(file.toString());
+            }
         }
 
         return listOfPaths;
