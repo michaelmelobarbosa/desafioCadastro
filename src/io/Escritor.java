@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EscritorDeArquivo {
+public class Escritor {
 
     public void escrever(Pet pet, String path) {
         List<String> petLista = petParaLista(pet);

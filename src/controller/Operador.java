@@ -2,22 +2,21 @@ package controller;
 
 import enums.Sexo;
 import enums.Tipo;
-import io.EscritorDeArquivo;
+import io.Escritor;
 import io.LeitorDeArquivo;
 import model.Endereco;
 import model.Pet;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Operador {
     String path = "formulario.txt";
     Scanner sc = new Scanner(System.in);
-    EscritorDeArquivo escritorDeArquivo = new EscritorDeArquivo();
+    Escritor escritorDeArquivo = new Escritor();
     LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
 
 
@@ -74,7 +73,7 @@ public class Operador {
         escritorDeArquivo.escrever(pet, path);
     }
 
-    public List<String> listarPets() {
+    public List<String> todosPetsParaLista() {
         var pathsOfPets = leitorDeArquivo.listOfPaths();
         List<String> listOfPets = new ArrayList<>();
 
@@ -83,15 +82,39 @@ public class Operador {
             String petFormated = leitorDeArquivo.listOfPetsOutput(petRaw);
             listOfPets.add(petFormated);
         }
-
         return listOfPets;
     }
 
-    public void printPets() {
-        List<String> pets = listarPets();
+    public void listarTodosPets(List<String> lista) {
 
-        for (int i = 0; i < pets.size(); i++) {
-            System.out.println((i + 1) + " - " + pets.get(i));
+        for (int i = 0; i < lista.size(); i++) {
+            System.out.println((i + 1) + " - " + lista.get(i));
         }
     }
+
+    public List<String> buscarPetsPorNomeOuSobrenome(String nome) {
+        List<String> pets = todosPetsParaLista();
+        return pets.stream().filter(p -> p.contains(nome.toLowerCase(Locale.ROOT))).toList();
+    }
+
+    public List<String> buscaPorSexo(String sexo) {
+        List<String> pets = todosPetsParaLista();
+        return pets.stream().filter(p -> p.contains(sexo.toLowerCase(Locale.ROOT))).toList();
+    }
+
+    public List<String> buscaPorIdade(double idade) {
+        var pets = todosPetsParaLista();
+        List<String> petsPorIdade = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        sb.append("5 - " + idade);
+        for (String pet : pets) {
+            if (pet.contains(sb.toString())) {
+                petsPorIdade.add(pet);
+            }
+        }
+
+        return petsPorIdade;
+    }
+
+
 }

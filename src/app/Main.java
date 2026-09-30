@@ -9,8 +9,9 @@ public class Main {
     static void main(String[] args) throws FileNotFoundException {
 
         Operador operador = new Operador();
-        operador.printPets();
+        double idade = 5;
 
-
+        List<String> porIdade = operador.buscaPorIdade(idade);
+        operador.listarTodosPets(porIdade);
     }
 }
