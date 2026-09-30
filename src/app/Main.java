@@ -1,6 +1,6 @@
 package app;
 
-import controller.Operador;
+import controller.PetController;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class Main {
     static void main(String[] args) throws FileNotFoundException {
 
-        Operador operador = new Operador();
+        PetController operador = new PetController();
         double idade = 5;
 
         List<String> porIdade = operador.buscaPorIdade(idade);

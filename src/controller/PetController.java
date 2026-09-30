@@ -2,10 +2,11 @@ package controller;
 
 import enums.Sexo;
 import enums.Tipo;
-import io.Escritor;
-import io.LeitorDeArquivo;
+import repository.Escritor;
+import repository.LeitorDeArquivo;
 import model.Endereco;
 import model.Pet;
+import service.PetService;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Operador {
+public class PetController {
+    PetService petService;
     String path = "formulario.txt";
     Scanner sc = new Scanner(System.in);
     Escritor escritorDeArquivo = new Escritor();
@@ -68,9 +70,7 @@ public class Operador {
         System.out.print("7: ");
         pet.setRaca(sc.next());
 
-        String path = escritorDeArquivo.outputFormatter(pet);
-
-        escritorDeArquivo.escrever(pet, path);
+        petService.cadastrar(pet);
     }
 
     public List<String> todosPetsParaLista() {
