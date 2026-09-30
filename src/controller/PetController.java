@@ -2,25 +2,21 @@ package controller;
 
 import enums.Sexo;
 import enums.Tipo;
-import io.EscritorDeArquivo;
-import io.LeitorDeArquivo;
 import model.Endereco;
 import model.Pet;
+import service.PetService;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class Operador {
-    String path = "formulario.txt";
-    Scanner sc = new Scanner(System.in);
-    EscritorDeArquivo escritorDeArquivo = new EscritorDeArquivo();
-    LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
+public class PetController {
+    private final Scanner sc = new Scanner(System.in);
+    private final PetService service;
 
+    public PetController(PetService service) {
+        this.service = service;
+    }
 
-    public void cadastrar() throws FileNotFoundException {
+    public void cadastrar() {
         Endereco endereco = new Endereco();
         Pet pet = new Pet();
 
@@ -68,22 +64,9 @@ public class Operador {
         System.out.print("7: ");
         pet.setRaca(sc.next());
 
-        String path = escritorDeArquivo.outputFormatter(pet);
-
-        escritorDeArquivo.escrever(pet, path);
-    }
-
-    public void listarPets() {
-        var pathsOfPets = leitorDeArquivo.listOfPaths();
-        List<String> listOfPets = new ArrayList<>();
-
-        for (int i = 0; i < pathsOfPets.size(); i++) {
-            List<String> petRaw = leitorDeArquivo.fileToString(pathsOfPets.get(i));
-            String petFormated = leitorDeArquivo.listOfPetsOutput(petRaw);
-            listOfPets.add(petFormated);
-            System.out.println(i + ". " + listOfPets.get(i));
-        }
-
+        service.cadastrar(pet);
+        System.out.println(pet.getNome() + " " + pet.getSobrenome() + " cadastrado(a) com sucesso!");
 
     }
+
 }
