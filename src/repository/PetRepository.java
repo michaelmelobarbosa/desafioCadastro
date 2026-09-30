@@ -1,18 +1,21 @@
 package repository;
 
 import model.Pet;
+import util.EscritorDeArquivo;
 
 public class PetRepository {
-    Escritor escritor = new Escritor();
+    private final EscritorDeArquivo escritorDeArquivo;
 
+    public PetRepository (EscritorDeArquivo escritorDeArquivo){
+        this.escritorDeArquivo = escritorDeArquivo;
+    }
 
-    public void cadastrar(Pet pet){
+    public void cadastrar(Pet pet) {
 
-        
+        String path = escritorDeArquivo.outputFormatter(pet);
 
-        String path = escritor.outputFormatter(pet);
+        escritorDeArquivo.escrever(pet, path);
 
-        escritor.escrever(pet, path);
     }
 
 }

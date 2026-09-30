@@ -2,27 +2,21 @@ package controller;
 
 import enums.Sexo;
 import enums.Tipo;
-import repository.Escritor;
-import repository.LeitorDeArquivo;
 import model.Endereco;
 import model.Pet;
 import service.PetService;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class PetController {
-    PetService petService;
-    String path = "formulario.txt";
-    Scanner sc = new Scanner(System.in);
-    Escritor escritorDeArquivo = new Escritor();
-    LeitorDeArquivo leitorDeArquivo = new LeitorDeArquivo();
+    private final Scanner sc = new Scanner(System.in);
+    private final PetService service;
 
+    public PetController(PetService service) {
+        this.service = service;
+    }
 
-    public void cadastrar() throws FileNotFoundException {
+    public void cadastrar() {
         Endereco endereco = new Endereco();
         Pet pet = new Pet();
 
@@ -70,51 +64,9 @@ public class PetController {
         System.out.print("7: ");
         pet.setRaca(sc.next());
 
-        petService.cadastrar(pet);
+        service.cadastrar(pet);
+        System.out.println(pet.getNome() + " " + pet.getSobrenome() + " cadastrado(a) com sucesso!");
+        
     }
-
-    public List<String> todosPetsParaLista() {
-        var pathsOfPets = leitorDeArquivo.listOfPaths();
-        List<String> listOfPets = new ArrayList<>();
-
-        for (String pathsOfPet : pathsOfPets) {
-            List<String> petRaw = leitorDeArquivo.fileToString(pathsOfPet);
-            String petFormated = leitorDeArquivo.listOfPetsOutput(petRaw);
-            listOfPets.add(petFormated);
-        }
-        return listOfPets;
-    }
-
-    public void listarTodosPets(List<String> lista) {
-
-        for (int i = 0; i < lista.size(); i++) {
-            System.out.println((i + 1) + " - " + lista.get(i));
-        }
-    }
-
-    public List<String> buscarPetsPorNomeOuSobrenome(String nome) {
-        List<String> pets = todosPetsParaLista();
-        return pets.stream().filter(p -> p.contains(nome.toLowerCase(Locale.ROOT))).toList();
-    }
-
-    public List<String> buscaPorSexo(String sexo) {
-        List<String> pets = todosPetsParaLista();
-        return pets.stream().filter(p -> p.contains(sexo.toLowerCase(Locale.ROOT))).toList();
-    }
-
-    public List<String> buscaPorIdade(double idade) {
-        var pets = todosPetsParaLista();
-        List<String> petsPorIdade = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb.append("5 - " + idade);
-        for (String pet : pets) {
-            if (pet.contains(sb.toString())) {
-                petsPorIdade.add(pet);
-            }
-        }
-
-        return petsPorIdade;
-    }
-
 
 }

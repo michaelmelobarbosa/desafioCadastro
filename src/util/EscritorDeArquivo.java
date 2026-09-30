@@ -1,4 +1,4 @@
-package repository;
+package util;
 
 import enums.Sexo;
 import enums.Tipo;
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Escritor {
+public class EscritorDeArquivo {
 
     public void escrever(Pet pet, String path) {
         List<String> petLista = petParaLista(pet);

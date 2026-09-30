@@ -4,15 +4,17 @@ import model.Pet;
 import repository.PetRepository;
 
 public class PetService {
-    PetRepository repository;
+    private final PetRepository repository;
+
+    public PetService(PetRepository repository){
+        this.repository = repository;
+    }
 
     public void cadastrar(Pet pet) {
-
-        validate(pet);
+       validate(pet);
         //ADICIONAR PETALREADYEXISTS EXTECPTION
+
         repository.cadastrar(pet);
-
-
     }
 
     public void validate(Pet pet) {
