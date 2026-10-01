@@ -73,19 +73,27 @@ public class PetController {
 
     }
 
-    public void listarPets(){
+    public void listarPets() {
 
         service.listarPets();
 
     }
 
-    public List<Pet> buscarPorNome(String nome){
+    public List<Pet> buscarPorNome(String nome) {
         return service.buscarPorNome(nome);
     }
 
-    public void printList(List<Pet> list){
+    public List<Pet> buscarPorTipo(String tipo) {
+        return service.buscarPorTipo(tipo);
+    }
+
+    public List<Pet> buscarPorSexo(String sexo) {
+        return service.buscarPorSexo(sexo);
+    }
+
+    public void printList(List<Pet> list) {
         for (int i = 0; i < list.size(); i++) {
-            System.out.println((i+1) + ". " + list.get(i));
+            System.out.println((i + 1) + ". " + list.get(i));
         }
     }
 

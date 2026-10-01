@@ -18,7 +18,7 @@ public class Main {
         PetService service = new PetService(repository);
         PetController controller = new PetController(service);
 
-        List<Pet> pets = controller.buscarPorNome("na");
+        List<Pet> pets = controller.buscarPorTipo("gato");
         controller.printList(pets);
 
 

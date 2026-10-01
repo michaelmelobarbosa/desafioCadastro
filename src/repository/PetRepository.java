@@ -1,5 +1,7 @@
 package repository;
 
+import enums.Sexo;
+import enums.Tipo;
 import model.Pet;
 import util.EscritorDeArquivo;
 import util.LeitorDeArquivo;
@@ -47,6 +49,17 @@ public class PetRepository {
         List<Pet> list = listaDePets();
 
         return list.stream().filter(p -> p.getNome().contains(nome)).toList();
+    }
+
+    public List<Pet> buscaPorTipo(Tipo tipo){
+        List<Pet> list = listaDePets();
+        return list.stream().filter(p -> p.getTipo().equals(tipo)).toList();
+    }
+
+    public List<Pet> buscarPorSexo(Sexo sexo) {
+        List<Pet> list = listaDePets();
+
+        return list.stream().filter(p -> p.getSexo().equals(sexo)).toList();
     }
 
 }
