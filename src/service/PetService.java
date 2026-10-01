@@ -4,6 +4,8 @@ import exceptions.ValidationException;
 import model.Pet;
 import repository.PetRepository;
 
+import java.util.List;
+
 public class PetService {
     private final PetRepository repository;
 
@@ -61,7 +63,13 @@ public class PetService {
         if(pet.getRaca() == null){
             throw new ValidationException("raça", "raça inválida");
         }
+    }
 
+    public void listarPets(){
+        repository.listarPets();
+    }
 
+    public List<Pet> buscarPorNome(String nome){
+        return repository.buscarPorNome(nome);
     }
 }

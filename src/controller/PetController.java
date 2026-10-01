@@ -5,7 +5,11 @@ import enums.Tipo;
 import model.Endereco;
 import model.Pet;
 import service.PetService;
+import util.LeitorDeArquivo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class PetController {
@@ -67,6 +71,22 @@ public class PetController {
         service.cadastrar(pet);
         System.out.println(pet.getNome() + " " + pet.getSobrenome() + " cadastrado(a) com sucesso!");
 
+    }
+
+    public void listarPets(){
+
+        service.listarPets();
+
+    }
+
+    public List<Pet> buscarPorNome(String nome){
+        return service.buscarPorNome(nome);
+    }
+
+    public void printList(List<Pet> list){
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((i+1) + ". " + list.get(i));
+        }
     }
 
 }
