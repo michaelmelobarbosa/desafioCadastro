@@ -4,6 +4,7 @@ import enums.Sexo;
 import enums.Tipo;
 import exceptions.ValidationException;
 import model.Pet;
+import model.PetDto;
 import repository.PetRepository;
 
 import java.util.List;
@@ -67,38 +68,16 @@ public class PetService {
         }
     }
 
-    public void listarPets() {
-        repository.listarPets();
+    public List<Pet> listaDePets() {
+        return repository.listaDePets();
     }
 
-    public List<Pet> buscarPorNome(String nome) {
-        return repository.buscarPorNome(nome);
+    public List<Pet> buscaPet(PetDto pet){
+        return repository.buscaPet(pet);
     }
 
-    public List<Pet> buscarPorTipo(String tipo) {
-        Tipo finalTipo;
-        String tipoNormalizado = tipo == null ? null : tipo.toLowerCase();
 
 
-        switch (tipoNormalizado) {
-            case "cachorro" -> finalTipo = Tipo.CACHORRO;
-            case "gato" -> finalTipo = Tipo.GATO;
-            case null -> throw new ValidationException("tipo", "Tipo não pode ser nulo");
-            default -> throw new ValidationException("tipo", "Tipo inválido");
-        }
-        return repository.buscaPorTipo(finalTipo);
-    }
 
-    public List<Pet> buscarPorSexo(String sexo) {
-        Sexo finalSexo;
-        String sexoNormalizado = sexo == null ? null : sexo.toLowerCase();
 
-        switch (sexoNormalizado) {
-            case "macho" -> finalSexo = Sexo.MACHO;
-            case "femea", "fêmea" -> finalSexo = Sexo.FEMEA;
-            case null -> throw new ValidationException("sexo", "Sexo não pode ser nulo");
-            default -> throw new ValidationException("sexo", "Sexo inválido");
-        }
-        return repository.buscarPorSexo(finalSexo);
-    }
 }

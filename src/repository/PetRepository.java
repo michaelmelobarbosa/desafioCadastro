@@ -1,14 +1,14 @@
 package repository;
 
-import enums.Sexo;
-import enums.Tipo;
+import model.Endereco;
 import model.Pet;
+import model.PetDto;
 import util.EscritorDeArquivo;
 import util.LeitorDeArquivo;
+import util.TextNormalizer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PetRepository {
     private final EscritorDeArquivo escritorDeArquivo;
@@ -51,15 +51,32 @@ public class PetRepository {
         return list.stream().filter(p -> p.getNome().contains(nome)).toList();
     }
 
-    public List<Pet> buscaPorTipo(Tipo tipo){
-        List<Pet> list = listaDePets();
-        return list.stream().filter(p -> p.getTipo().equals(tipo)).toList();
+    private boolean contem(String petCadastrado, String entrada) {
+        if (petCadastrado == null) return false;
+        String a = TextNormalizer.normalize(petCadastrado);
+        String b = TextNormalizer.normalize(entrada);
+        return a.contains(b);
     }
 
-    public List<Pet> buscarPorSexo(Sexo sexo) {
+    private boolean contemEndereco(Endereco endereco, String busca) {
+        if (endereco == null) return false;
+        return contem(endereco.getRua(), busca)
+                || contem(endereco.getNumero(), busca)
+                || contem(endereco.getCidade(), busca);
+    }
+
+    public List<Pet> buscaPet(PetDto f) {
         List<Pet> list = listaDePets();
 
-        return list.stream().filter(p -> p.getSexo().equals(sexo)).toList();
+        return list.stream()
+                .filter(p -> f.getNome() == null || contem(p.getNome(), f.getNome()))
+                .filter(p -> f.getTipo() == null || p.getTipo() == f.getTipo())
+                .filter(p -> f.getSexo() == null || p.getSexo() == f.getSexo())
+                .filter(p -> f.getIdade() == null || p.getIdade().equals(f.getIdade()))
+                .filter(p -> f.getPeso() == null || p.getPeso().equals(f.getPeso()))
+                .filter(p -> f.getRaca() == null || contem(p.getRaca(), f.getRaca()))
+                .filter(p -> f.getEndereco() == null || contemEndereco(p.getEndereco(), f.getEndereco()))
+                .toList();
     }
 
 }

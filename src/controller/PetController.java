@@ -2,22 +2,25 @@ package controller;
 
 import enums.Sexo;
 import enums.Tipo;
+import exceptions.ValidationException;
 import model.Endereco;
 import model.Pet;
+import model.PetDto;
 import service.PetService;
 import util.LeitorDeArquivo;
+import util.TextNormalizer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.sql.SQLOutput;
+import java.util.*;
 
 public class PetController {
     private final Scanner sc = new Scanner(System.in);
     private final PetService service;
+    private final PetDto petDto;
 
-    public PetController(PetService service) {
+    public PetController(PetService service, PetDto petDto) {
         this.service = service;
+        this.petDto = petDto;
     }
 
     public void cadastrar() {
@@ -73,22 +76,8 @@ public class PetController {
 
     }
 
-    public void listarPets() {
-
-        service.listarPets();
-
-    }
-
-    public List<Pet> buscarPorNome(String nome) {
-        return service.buscarPorNome(nome);
-    }
-
-    public List<Pet> buscarPorTipo(String tipo) {
-        return service.buscarPorTipo(tipo);
-    }
-
-    public List<Pet> buscarPorSexo(String sexo) {
-        return service.buscarPorSexo(sexo);
+    public List<Pet> listaDePets() {
+        return service.listaDePets();
     }
 
     public void printList(List<Pet> list) {
@@ -96,5 +85,68 @@ public class PetController {
             System.out.println((i + 1) + ". " + list.get(i));
         }
     }
+
+    public List<Pet> buscaPet() {
+        String nomeESobrenome = null;
+        String sexoEntrada = null;
+        Double idade = null;
+        Double peso = null;
+        String raca = null;
+        String enderecoEntrada = null;
+        Tipo tipo;
+
+        System.out.println("Escolha o tipo do pet: 1-gato | 2-cachorro: ");
+        int escolhaTipo = Integer.parseInt(sc.nextLine().trim());
+        if (escolhaTipo == 1) {
+            tipo = Tipo.GATO;
+        } else if (escolhaTipo == 2) {
+            tipo = Tipo.CACHORRO;
+        } else {
+            throw new IllegalArgumentException("Valor inválido");
+        }
+
+        System.out.println("Escolha de 1 a 2 critérios que deseja buscar: ('Tipo' é um critério obrigatório)");
+        System.out.println("""
+                1. Nome ou sobrenome
+                2. Sexo
+                3. Idade
+                4. Peso
+                5. Raça
+                6. Endereço
+                """);
+
+        String escolhas = sc.nextLine().replaceAll("\\s+", "");
+
+
+        for (int i = 0; i < escolhas.length(); i++) {
+            switch (escolhas.charAt(i)) {
+                case '1' -> nomeESobrenome = sc.nextLine().trim();
+                case '2' -> sexoEntrada = sc.nextLine().trim();
+                case '3' -> idade = Double.parseDouble(sc.nextLine().trim());
+                case '4' -> peso = Double.parseDouble(sc.nextLine().trim());
+                case '5' -> raca = sc.nextLine().trim();
+                case '6' -> enderecoEntrada = sc.nextLine().trim();
+                default -> throw new IllegalArgumentException("Parâmetro não existe");
+            }
+        }
+
+        Sexo sexo = sexoEntrada == null ? null : parseSexo(sexoEntrada);
+        String endereco = (enderecoEntrada == null || enderecoEntrada.isBlank()) ? null : enderecoEntrada;
+
+        PetDto pet = new PetDto(nomeESobrenome, tipo, sexo, idade, peso, raca, endereco);
+
+        return service.buscaPet(pet);
+    }
+
+    private Sexo parseSexo(String valor) {
+        return switch (TextNormalizer.normalize(valor)) {
+            case "macho" -> Sexo.MACHO;
+            case "femea" -> Sexo.FEMEA;
+            default -> throw new ValidationException("Sexo", "Sexo Inválido");
+        };
+
+
+    }
+
 
 }
