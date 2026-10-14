@@ -60,6 +60,7 @@ public class PetRepository {
 
     private boolean contemEndereco(Endereco endereco, String busca) {
         if (endereco == null) return false;
+
         return contem(endereco.getRua(), busca)
                 || contem(endereco.getNumero(), busca)
                 || contem(endereco.getCidade(), busca);
@@ -69,7 +70,8 @@ public class PetRepository {
         List<Pet> list = listaDePets();
 
         return list.stream()
-                .filter(p -> f.getNome() == null || contem(p.getNome(), f.getNome()))
+                .filter(p -> f.getNome() == null || contem(p.getNome(), f.getNome())
+                        || contem(p.getSobrenome(), f.getNome()))
                 .filter(p -> f.getTipo() == null || p.getTipo() == f.getTipo())
                 .filter(p -> f.getSexo() == null || p.getSexo() == f.getSexo())
                 .filter(p -> f.getIdade() == null || p.getIdade().equals(f.getIdade()))
@@ -78,5 +80,4 @@ public class PetRepository {
                 .filter(p -> f.getEndereco() == null || contemEndereco(p.getEndereco(), f.getEndereco()))
                 .toList();
     }
-
 }

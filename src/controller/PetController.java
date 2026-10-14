@@ -93,30 +93,12 @@ public class PetController {
         Double peso = null;
         String raca = null;
         String enderecoEntrada = null;
-        Tipo tipo;
 
-        System.out.println("Escolha o tipo do pet: 1-gato | 2-cachorro: ");
-        int escolhaTipo = Integer.parseInt(sc.nextLine().trim());
-        if (escolhaTipo == 1) {
-            tipo = Tipo.GATO;
-        } else if (escolhaTipo == 2) {
-            tipo = Tipo.CACHORRO;
-        } else {
-            throw new IllegalArgumentException("Valor inválido");
-        }
+        Tipo tipo = escolhaTipo();
 
-        System.out.println("Escolha de 1 a 2 critérios que deseja buscar: ('Tipo' é um critério obrigatório)");
-        System.out.println("""
-                1. Nome ou sobrenome
-                2. Sexo
-                3. Idade
-                4. Peso
-                5. Raça
-                6. Endereço
-                """);
+        mostrarMenuBusca();
 
         String escolhas = sc.nextLine().replaceAll("\\s+", "");
-
 
         for (int i = 0; i < escolhas.length(); i++) {
             switch (escolhas.charAt(i)) {
@@ -126,7 +108,7 @@ public class PetController {
                 case '4' -> peso = Double.parseDouble(sc.nextLine().trim());
                 case '5' -> raca = sc.nextLine().trim();
                 case '6' -> enderecoEntrada = sc.nextLine().trim();
-                default -> throw new IllegalArgumentException("Parâmetro não existe");
+                default -> mostrarMenuBusca();
             }
         }
 
@@ -138,13 +120,39 @@ public class PetController {
         return service.buscaPet(pet);
     }
 
+    private static void mostrarMenuBusca() {
+        System.out.println("Escolha de 1 a 2 critérios que deseja buscar: ('Tipo' é um critério obrigatório)");
+        System.out.println("""
+                1. Nome ou sobrenome
+                2. Sexo
+                3. Idade
+                4. Peso
+                5. Raça
+                6. Endereço
+                """);
+    }
+
     private Sexo parseSexo(String valor) {
         return switch (TextNormalizer.normalize(valor)) {
             case "macho" -> Sexo.MACHO;
             case "femea" -> Sexo.FEMEA;
             default -> throw new ValidationException("Sexo", "Sexo Inválido");
         };
+    }
 
+    private Tipo escolhaTipo() {
+        while (true) {
+            System.out.println("Escolha o tipo de Pet");
+            switch (sc.nextLine().trim()) {
+                case "1" -> {
+                    return Tipo.GATO;
+                }
+                case "2" -> {
+                    return Tipo.CACHORRO;
+                }
+                default -> System.out.println("Opção inválida");
+            }
+        }
 
     }
 
