@@ -95,11 +95,13 @@ public class PetController {
         String raca = null;
         String enderecoEntrada = null;
 
-        Tipo tipo = escolhaTipo();
 
-        mostrarMenuBusca();
+        Tipo tipo = escolhaTipo();
+//        mostrarMenuBusca();
+
 
         String escolhas = sc.nextLine().replaceAll("\\s+", "");
+        menuDeBusca(escolhas);
 
         for (int i = 0; i < escolhas.length(); i++) {
             switch (escolhas.charAt(i)) {
@@ -121,7 +123,7 @@ public class PetController {
     }
 
     private static void mostrarMenuBusca() {
-        System.out.println("Escolha de 1 a 2 critérios que deseja buscar: ('Tipo' é um critério obrigatório)");
+        System.out.println("Escolha de 1 a 6 entre os critérios abaixo: ('Tipo' é um critério obrigatório)");
         System.out.println("""
                 1. Nome ou sobrenome
                 2. Sexo
@@ -168,8 +170,8 @@ public class PetController {
     }
 
     private Sexo lerSexo() {
-
         while (true) {
+            System.out.println("o sexo do pet: ");
             String sexo = sc.nextLine().trim();
             try {
                 return parseSexo(sexo);
@@ -179,4 +181,9 @@ public class PetController {
         }
     }
 
+    private void menuDeBusca(String escolha){
+        mostrarMenuBusca();
+
+
+    }
 }
