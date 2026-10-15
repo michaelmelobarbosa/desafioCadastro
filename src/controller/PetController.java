@@ -10,6 +10,7 @@ import service.PetService;
 import util.LeitorDeArquivo;
 import util.TextNormalizer;
 
+import javax.sound.midi.Soundbank;
 import java.sql.SQLOutput;
 import java.util.*;
 
@@ -88,7 +89,7 @@ public class PetController {
 
     public List<Pet> buscaPet() {
         String nomeESobrenome = null;
-        String sexoEntrada = null;
+        Sexo sexo = null;
         Double idade = null;
         Double peso = null;
         String raca = null;
@@ -103,16 +104,15 @@ public class PetController {
         for (int i = 0; i < escolhas.length(); i++) {
             switch (escolhas.charAt(i)) {
                 case '1' -> nomeESobrenome = sc.nextLine().trim();
-                case '2' -> sexoEntrada = sc.nextLine().trim();
-                case '3' -> idade = Double.parseDouble(sc.nextLine().trim());
-                case '4' -> peso = Double.parseDouble(sc.nextLine().trim());
+                case '2' -> sexo = lerSexo();
+                case '3' -> idade = lerDouble("a idade do pet: ");
+                case '4' -> peso = lerDouble("o peso do pet: ");
                 case '5' -> raca = sc.nextLine().trim();
                 case '6' -> enderecoEntrada = sc.nextLine().trim();
                 default -> mostrarMenuBusca();
             }
         }
 
-        Sexo sexo = sexoEntrada == null ? null : parseSexo(sexoEntrada);
         String endereco = (enderecoEntrada == null || enderecoEntrada.isBlank()) ? null : enderecoEntrada;
 
         PetDto pet = new PetDto(nomeESobrenome, tipo, sexo, idade, peso, raca, endereco);
@@ -132,17 +132,9 @@ public class PetController {
                 """);
     }
 
-    private Sexo parseSexo(String valor) {
-        return switch (TextNormalizer.normalize(valor)) {
-            case "macho" -> Sexo.MACHO;
-            case "femea" -> Sexo.FEMEA;
-            default -> throw new ValidationException("Sexo", "Sexo Inválido");
-        };
-    }
-
     private Tipo escolhaTipo() {
         while (true) {
-            System.out.println("Escolha o tipo de Pet");
+            System.out.println("Escolha o tipo de Pet (1-gato | 2-cachorro): ");
             switch (sc.nextLine().trim()) {
                 case "1" -> {
                     return Tipo.GATO;
@@ -153,8 +145,38 @@ public class PetController {
                 default -> System.out.println("Opção inválida");
             }
         }
-
     }
 
+    private Double lerDouble(String message) {
+        System.out.println(message);
+        while (true) {
+            String input = sc.nextLine().trim().replace(",", ".");
+            try {
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Valor inválido. Exemplos de entradas válidas: '2' ou '1,2'");
+            }
+        }
+    }
+
+    private Sexo parseSexo(String valor) {
+        return switch (TextNormalizer.normalize(valor)) {
+            case "macho" -> Sexo.MACHO;
+            case "femea" -> Sexo.FEMEA;
+            default -> throw new ValidationException("Sexo", "Sexo Inválido");
+        };
+    }
+
+    private Sexo lerSexo() {
+
+        while (true) {
+            String sexo = sc.nextLine().trim();
+            try {
+                return parseSexo(sexo);
+            }catch (ValidationException e){
+                System.out.println("Sexo inválido. Entradas válidas: femea ou macho");
+            }
+        }
+    }
 
 }

@@ -22,7 +22,7 @@ public class Main {
 
         //-------------------------------------------------------------
 
-        List<Pet> pets = controller.listaDePets();
+        List<Pet> pets = controller.buscaPet()  ;
         controller.printList(pets);
     }
 }
