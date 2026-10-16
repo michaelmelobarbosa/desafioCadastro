@@ -93,33 +93,23 @@ public class PetController {
         Double idade = null;
         Double peso = null;
         String raca = null;
-        String enderecoEntrada = null;
+        String endereco = null;
 
 
         Tipo tipo = escolhaTipo();
-        mostrarMenuBusca();
-
-
-        String escolhas = sc.nextLine().replaceAll("\\s+", "").trim();
-
-        while (escolhas.length() > 2) {
-            System.out.println("Máximo de 2 opções de filtro de busca");
-            escolhas = sc.nextLine().replaceAll("\\s+", "").trim();
-        }
+        String escolhas = lerEscolhasBusca();
 
         for (int i = 0; i < escolhas.length(); i++) {
-                switch (escolhas.charAt(i)) {
-                    case '1' -> nomeESobrenome = sc.nextLine().trim();
-                    case '2' -> sexo = lerSexo();
-                    case '3' -> idade = lerDouble("a idade do pet: ");
-                    case '4' -> peso = lerDouble("o peso do pet: ");
-                    case '5' -> raca = sc.nextLine().trim();
-                    case '6' -> enderecoEntrada = sc.nextLine().trim();
-                    default -> mostrarMenuBusca();
-                }
+            switch (escolhas.charAt(i)) {
+                case '1' -> nomeESobrenome = lerEntrada("o nome ou sobrenome: ");
+                case '2' -> sexo = lerSexo("o sexo do pet: ");
+                case '3' -> idade = lerDouble("a idade do pet: ");
+                case '4' -> peso = lerDouble("o peso do pet: ");
+                case '5' -> raca = lerEntrada("a raça: ");
+                case '6' -> endereco = lerEntrada("o endereço: ");
+                default -> throw new ValidationException(String.valueOf(escolhas.charAt(i)), " -> entrada inválida");
+            }
         }
-
-        String endereco = (enderecoEntrada == null || enderecoEntrada.isBlank()) ? null : enderecoEntrada;
 
         PetDto pet = new PetDto(nomeESobrenome, tipo, sexo, idade, peso, raca, endereco);
 
@@ -136,6 +126,24 @@ public class PetController {
                 5. Raça
                 6. Endereço
                 """);
+    }
+
+    private String lerEscolhasBusca() {
+        while (true) {
+            mostrarMenuBusca();
+            System.out.print("Digite um ou dois critérios (ex.: 16): ");
+
+            String escolhas = sc.nextLine().replaceAll("\\s+", "");
+            boolean formatoValido = escolhas.matches("[1-6]{1,2}");
+            boolean semDuplicatas =
+                    escolhas.chars().distinct().count() == escolhas.length();
+
+            if (formatoValido && semDuplicatas) {
+                return escolhas;
+            }
+
+            System.out.println("Escolha de 1 a 2 critérios diferentes, usando números de 1 a 6.");
+        }
     }
 
     private Tipo escolhaTipo() {
@@ -173,9 +181,9 @@ public class PetController {
         };
     }
 
-    private Sexo lerSexo() {
+    private Sexo lerSexo(String message) {
         while (true) {
-            System.out.println("o sexo do pet: ");
+            System.out.println(message);
             String sexo = sc.nextLine().trim();
             try {
                 return parseSexo(sexo);
@@ -185,15 +193,9 @@ public class PetController {
         }
     }
 
-    private void menuDeBusca(String escolhas) {
-        mostrarMenuBusca();
-
-
-        while (true) {
-            if (escolhas.length() > 2) {
-                System.out.println("Escolha máxima: 2 critérios");
-            }
-
-        }
+    private String lerEntrada(String message) {
+        System.out.println(message);
+        String entrada = sc.nextLine().trim();
+        return entrada.isBlank() ? null : entrada.trim();
     }
 }
