@@ -97,22 +97,26 @@ public class PetController {
 
 
         Tipo tipo = escolhaTipo();
-//        mostrarMenuBusca();
+        mostrarMenuBusca();
 
 
-        String escolhas = sc.nextLine().replaceAll("\\s+", "");
-        menuDeBusca(escolhas);
+        String escolhas = sc.nextLine().replaceAll("\\s+", "").trim();
+
+        while (escolhas.length() > 2) {
+            System.out.println("Máximo de 2 opções de filtro de busca");
+            escolhas = sc.nextLine().replaceAll("\\s+", "").trim();
+        }
 
         for (int i = 0; i < escolhas.length(); i++) {
-            switch (escolhas.charAt(i)) {
-                case '1' -> nomeESobrenome = sc.nextLine().trim();
-                case '2' -> sexo = lerSexo();
-                case '3' -> idade = lerDouble("a idade do pet: ");
-                case '4' -> peso = lerDouble("o peso do pet: ");
-                case '5' -> raca = sc.nextLine().trim();
-                case '6' -> enderecoEntrada = sc.nextLine().trim();
-                default -> mostrarMenuBusca();
-            }
+                switch (escolhas.charAt(i)) {
+                    case '1' -> nomeESobrenome = sc.nextLine().trim();
+                    case '2' -> sexo = lerSexo();
+                    case '3' -> idade = lerDouble("a idade do pet: ");
+                    case '4' -> peso = lerDouble("o peso do pet: ");
+                    case '5' -> raca = sc.nextLine().trim();
+                    case '6' -> enderecoEntrada = sc.nextLine().trim();
+                    default -> mostrarMenuBusca();
+                }
         }
 
         String endereco = (enderecoEntrada == null || enderecoEntrada.isBlank()) ? null : enderecoEntrada;
@@ -123,7 +127,7 @@ public class PetController {
     }
 
     private static void mostrarMenuBusca() {
-        System.out.println("Escolha de 1 a 6 entre os critérios abaixo: ('Tipo' é um critério obrigatório)");
+        System.out.println("Escolha de 1 a 6 (máximo 2) entre os critérios abaixo: ('Tipo' é um critério obrigatório)");
         System.out.println("""
                 1. Nome ou sobrenome
                 2. Sexo
@@ -175,15 +179,21 @@ public class PetController {
             String sexo = sc.nextLine().trim();
             try {
                 return parseSexo(sexo);
-            }catch (ValidationException e){
+            } catch (ValidationException e) {
                 System.out.println("Sexo inválido. Entradas válidas: femea ou macho");
             }
         }
     }
 
-    private void menuDeBusca(String escolha){
+    private void menuDeBusca(String escolhas) {
         mostrarMenuBusca();
 
 
+        while (true) {
+            if (escolhas.length() > 2) {
+                System.out.println("Escolha máxima: 2 critérios");
+            }
+
+        }
     }
 }
