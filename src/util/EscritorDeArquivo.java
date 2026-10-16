@@ -43,9 +43,9 @@ public class EscritorDeArquivo {
         }
 
         if (pet.getSexo() == Sexo.MACHO) {
-            listaPet.add("macho");
+            listaPet.add("MACHO");
         } else if (pet.getSexo() == Sexo.FEMEA) {
-            listaPet.add("fêmea");
+            listaPet.add("FEMEA");
         }
 
         listaPet.add(String.join(", ", pet.getEnderecoComoLista()));

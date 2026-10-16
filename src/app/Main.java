@@ -1,21 +1,28 @@
 package app;
 
 import controller.PetController;
+import model.Pet;
+import model.PetDto;
 import repository.PetRepository;
 import service.PetService;
 import util.EscritorDeArquivo;
+import util.LeitorDeArquivo;
 
-import java.io.FileNotFoundException;
+import java.util.List;
 
 public class Main {
-    static void main(String[] args)  {
-        EscritorDeArquivo escritorDeArquivo = new EscritorDeArquivo();
-        PetRepository repository = new PetRepository(escritorDeArquivo);
+    static void main(String[] args) {
+        EscritorDeArquivo escritor = new EscritorDeArquivo();
+        LeitorDeArquivo leitor = new LeitorDeArquivo();
+        PetDto petDto = new PetDto();
+
+        PetRepository repository = new PetRepository(escritor, leitor);
         PetService service = new PetService(repository);
-        PetController controller = new PetController(service);
+        PetController controller = new PetController(service, petDto);
 
-        controller.cadastrar();
+        //-------------------------------------------------------------
 
-
+        List<Pet> pets = controller.buscaPet()  ;
+        controller.printList(pets);
     }
 }

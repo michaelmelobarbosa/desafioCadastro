@@ -16,6 +16,21 @@ public class Pet {
     private Double peso;
     private String raca;
 
+    public Pet(){
+
+    }
+
+    public Pet(String nome, String sobrenome, Tipo tipo, Sexo sexo, Endereco endereco, Double idade, Double peso, String raca){
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.tipo = tipo;
+        this.sexo = sexo;
+        this.endereco = endereco;
+        this.idade = idade;
+        this.peso = peso;
+        this.raca = raca;
+    }
+
 
     public String getNome() {
         return nome;
@@ -100,4 +115,10 @@ public class Pet {
         return Objects.hash(nome, idade, raca);
     }
 
+    @Override
+    public String toString() {
+        return nome + " " + sobrenome + " - " + tipo.toString().toLowerCase() + " - " + sexo.toString().toLowerCase() + " - " + endereco.getRua() +
+                " - " + endereco.getNumero() + " - " + endereco.getCidade() + " - " + idade +
+                " - " + peso + " - " + raca;
+    }
 }
