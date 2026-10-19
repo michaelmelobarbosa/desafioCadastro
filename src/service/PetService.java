@@ -43,23 +43,27 @@ public class PetService {
             throw new ValidationException("sexo", "sexo é obrigatório.");
         }
 
-        if (pet.getEndereco().getRua() == null) {
+        if (pet.getEndereco() == null) {
+            throw new ValidationException("endereço", "endereço é obrigatório");
+        }
+
+        if (pet.getEndereco().getRua() == null || pet.getEndereco().getRua().isBlank()) {
             throw new ValidationException("rua", "rua é obrigatória");
         }
 
-        if (pet.getEndereco().getNumero() == null) {
+        if (pet.getEndereco().getNumero() == null || pet.getEndereco().getNumero().isBlank()) {
             throw new ValidationException("numero", "numero é obrigatório");
         }
 
-        if (pet.getEndereco().getCidade() == null) {
+        if (pet.getEndereco().getCidade() == null || pet.getEndereco().getCidade().isBlank()) {
             throw new ValidationException("cidade", "cidade é obrigatória");
         }
 
-        if (pet.getIdade() == null || pet.getIdade() < 0) {
+        if (pet.getIdade() == null || pet.getIdade() < 0 || !Double.isFinite(pet.getIdade())) {
             throw new ValidationException("idade", "idade inválida");
         }
 
-        if (pet.getPeso() == null || pet.getPeso() < 0) {
+        if (pet.getPeso() == null || pet.getPeso() < 0 || !Double.isFinite(pet.getPeso())) {
             throw new ValidationException("peso", "peso inválida");
         }
 
@@ -72,12 +76,9 @@ public class PetService {
         return repository.listaDePets();
     }
 
-    public List<Pet> buscaPet(PetDto pet){
+    public List<Pet> buscaPet(PetDto pet) {
         return repository.buscaPet(pet);
     }
-
-
-
 
 
 }

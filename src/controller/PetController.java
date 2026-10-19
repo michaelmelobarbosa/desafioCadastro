@@ -7,21 +7,17 @@ import model.Endereco;
 import model.Pet;
 import model.PetDto;
 import service.PetService;
-import util.LeitorDeArquivo;
 import util.TextNormalizer;
 
-import javax.sound.midi.Soundbank;
-import java.sql.SQLOutput;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 public class PetController {
     private final Scanner sc = new Scanner(System.in);
     private final PetService service;
-    private final PetDto petDto;
 
-    public PetController(PetService service, PetDto petDto) {
+    public PetController(PetService service) {
         this.service = service;
-        this.petDto = petDto;
     }
 
     public void cadastrar() {
@@ -29,11 +25,11 @@ public class PetController {
         Pet pet = new Pet();
 
         System.out.print("1: ");
-        pet.setNome(sc.next());
-        pet.setSobrenome(sc.next());
+        pet.setNome(sc.nextLine());
+        pet.setSobrenome(sc.nextLine());
 
         System.out.print("2: ");
-        String tipo = sc.next();
+        String tipo = sc.nextLine();
         if (tipo.equalsIgnoreCase("cachorro")) {
             pet.setTipo(Tipo.CACHORRO);
         } else if (tipo.equalsIgnoreCase("gato")) {
@@ -43,7 +39,7 @@ public class PetController {
         }
 
         System.out.print("3: ");
-        String sexo = sc.next();
+        String sexo = sc.nextLine();
 
         if (sexo.equalsIgnoreCase("macho")) {
             pet.setSexo(Sexo.MACHO);
@@ -56,21 +52,21 @@ public class PetController {
 
         System.out.println("4: ");
         System.out.print("Rua: ");
-        endereco.setRua(sc.next());
+        endereco.setRua(sc.nextLine());
         System.out.print("Número: ");
-        endereco.setNumero(sc.next());
+        endereco.setNumero(sc.nextLine());
         System.out.print("Cidade: ");
-        endereco.setCidade(sc.next());
+        endereco.setCidade(sc.nextLine());
         pet.setEndereco(endereco);
 
         System.out.print("5: ");
-        pet.setIdade(sc.nextDouble());
+        pet.setIdade(lerDouble("a idade"));
 
         System.out.print("6: ");
-        pet.setPeso(sc.nextDouble());
+        pet.setPeso(lerDouble("a peso"));
 
         System.out.print("7: ");
-        pet.setRaca(sc.next());
+        pet.setRaca(sc.nextLine());
 
         service.cadastrar(pet);
         System.out.println(pet.getNome() + " " + pet.getSobrenome() + " cadastrado(a) com sucesso!");
@@ -107,7 +103,7 @@ public class PetController {
                 case '4' -> peso = lerDouble("o peso do pet: ");
                 case '5' -> raca = lerEntrada("a raça: ");
                 case '6' -> endereco = lerEntrada("o endereço: ");
-                default -> throw new ValidationException(String.valueOf(escolhas.charAt(i)), " -> entrada inválida");
+                default -> throw new IllegalStateException("Entrada inválida");
             }
         }
 
@@ -162,11 +158,17 @@ public class PetController {
     }
 
     private Double lerDouble(String message) {
-        System.out.println(message);
         while (true) {
-            String input = sc.nextLine().trim().replace(",", ".");
+            System.out.println(message);
+            String inputString = sc.nextLine().trim().replace(",", ".");
             try {
-                return Double.parseDouble(input);
+                Double input = Double.parseDouble(inputString);
+
+                if (!validDouble(input)) {
+                    System.out.println("Valor não pode ser menor que zero nem ser infinito.");
+                    continue;
+                }
+                return input;
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Exemplos de entradas válidas: '2' ou '1,2'");
             }
@@ -194,8 +196,17 @@ public class PetController {
     }
 
     private String lerEntrada(String message) {
-        System.out.println(message);
-        String entrada = sc.nextLine().trim();
-        return entrada.isBlank() ? null : entrada.trim();
+        while (true) {
+            System.out.println(message);
+            String entrada = sc.nextLine().trim();
+            if (!entrada.isBlank()) {
+                return entrada.isBlank() ? null : entrada.trim();
+            }
+            System.out.println("Entrada não pode ser vazia. Tente novamente.");
+        }
+    }
+
+    private boolean validDouble(Double input) {
+        return Double.isFinite(input) && input >= 0;
     }
 }
