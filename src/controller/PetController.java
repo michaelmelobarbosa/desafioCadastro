@@ -78,6 +78,10 @@ public class PetController {
     }
 
     public void printList(List<Pet> list) {
+        if (list.isEmpty()) {
+            System.out.println("Nenhum pet encontrado!");
+        }
+
         for (int i = 0; i < list.size(); i++) {
             System.out.println((i + 1) + ". " + list.get(i));
         }
