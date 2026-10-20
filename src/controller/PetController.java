@@ -6,6 +6,7 @@ import exceptions.ValidationException;
 import model.Endereco;
 import model.Pet;
 import model.PetDto;
+import model.PetRegistro;
 import service.PetService;
 import util.TextNormalizer;
 
@@ -77,13 +78,18 @@ public class PetController {
         return service.listaDePets();
     }
 
-    public void printList(List<Pet> list) {
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println((i + 1) + ". " + list.get(i));
+    public void printList(List<PetRegistro> registros) {
+        if (registros.isEmpty()) {
+            System.out.println("Nenhum pet encontrado!");
+            return;
+        }
+
+        for (int i = 0; i < registros.size(); i++) {
+            System.out.println((i + 1) + ". " + registros.get(i).pet());
         }
     }
 
-    public List<Pet> buscaPet() {
+    public List<PetRegistro> buscaPet() {
         String nomeESobrenome = null;
         Sexo sexo = null;
         Double idade = null;
@@ -110,6 +116,69 @@ public class PetController {
         PetDto pet = new PetDto(nomeESobrenome, tipo, sexo, idade, peso, raca, endereco);
 
         return service.buscaPet(pet);
+    }
+
+    private void deletePet(List<PetRegistro> registros) {
+        if (registros.isEmpty()) {
+            System.out.println("Lista vazia. Nenhum pet para ser deletado!");
+            return;
+        }
+
+        int index;
+
+        while (true) {
+            System.out.print("Digite o número do pet a ser deletado: ");
+
+            try {
+                index = Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Digite um número.");
+                continue;
+            }
+
+            if (index > 0 && index <= registros.size()) {
+                break;
+            }
+
+            System.out.println("Opção inválida! Tente novamente.");
+        }
+
+        PetRegistro registro = registros.get(index - 1);
+
+        if (!confirmarExclusao(registro.pet())) {
+            System.out.println("Exclusão cancelada.");
+            return;
+        }
+
+        boolean deleted = service.deletePet(registro.path());
+
+        if (deleted) {
+            System.out.println(registro.pet().getNome() + " excluído(a) com sucesso!");
+        } else {
+            System.out.println("Não foi possível excluir o pet.");
+        }
+    }
+
+    private boolean confirmarExclusao(Pet pet) {
+        while (true) {
+            System.out.print(
+                    "Tem certeza que deseja excluir "
+                            + pet.getNome() + " " + pet.getSobrenome()
+                            + "? (SIM/NÃO): "
+            );
+
+            String resposta = TextNormalizer.normalize(sc.nextLine());
+
+            if (resposta.equals("sim")) {
+                return true;
+            }
+
+            if (resposta.equals("nao")) {
+                return false;
+            }
+
+            System.out.println("Resposta inválida. Digite SIM ou NÃO.");
+        }
     }
 
     private static void mostrarMenuBusca() {

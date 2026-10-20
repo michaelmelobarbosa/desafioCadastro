@@ -5,6 +5,7 @@ import enums.Tipo;
 import exceptions.ValidationException;
 import model.Pet;
 import model.PetDto;
+import model.PetRegistro;
 import repository.PetRepository;
 
 import java.util.List;
@@ -76,8 +77,16 @@ public class PetService {
         return repository.listaDePets();
     }
 
-    public List<Pet> buscaPet(PetDto pet) {
+    public List<PetRegistro> buscaPet(PetDto pet) {
         return repository.buscaPet(pet);
+    }
+
+    public boolean deletePet(String path) {
+        if (path == null || path.isBlank()) {
+            throw new IllegalArgumentException("Caminho do pet não pode ser vazio.");
+        }
+
+        return repository.deletePet(path);
     }
 
 
