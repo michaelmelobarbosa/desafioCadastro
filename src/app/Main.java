@@ -1,8 +1,7 @@
 package app;
 
 import controller.PetController;
-import model.Pet;
-import model.PetDto;
+import model.PetRegistro;
 import repository.PetRepository;
 import service.PetService;
 import util.EscritorDeArquivo;
@@ -14,15 +13,14 @@ public class Main {
     static void main(String[] args) {
         EscritorDeArquivo escritor = new EscritorDeArquivo();
         LeitorDeArquivo leitor = new LeitorDeArquivo();
-        PetDto petDto = new PetDto();
 
         PetRepository repository = new PetRepository(escritor, leitor);
         PetService service = new PetService(repository);
-        PetController controller = new PetController(service, petDto);
+        PetController controller = new PetController(service);
 
         //-------------------------------------------------------------
 
-        List<Pet> pets = controller.buscaPet()  ;
+        List<PetRegistro> pets = controller.buscaPet();
         controller.printList(pets);
     }
 }

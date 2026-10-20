@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Endereco {
     private String numero;
     private String cidade;
@@ -40,6 +42,18 @@ public class Endereco {
     @Override
     public String toString() {
         return rua + ", " + numero + ", " + cidade;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Endereco endereco = (Endereco) o;
+        return Objects.equals(numero, endereco.numero) && Objects.equals(cidade, endereco.cidade) && Objects.equals(rua, endereco.rua);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numero, cidade, rua);
     }
 }
 

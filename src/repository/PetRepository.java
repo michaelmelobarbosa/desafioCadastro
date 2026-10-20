@@ -3,10 +3,12 @@ package repository;
 import model.Endereco;
 import model.Pet;
 import model.PetDto;
+import model.PetRegistro;
 import util.EscritorDeArquivo;
 import util.LeitorDeArquivo;
 import util.TextNormalizer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,20 +24,21 @@ public class PetRepository {
     public void cadastrar(Pet pet) {
         String path = escritorDeArquivo.outputFormatter(pet);
         escritorDeArquivo.escrever(pet, path);
+    }
 
+    public List<PetRegistro> listaDeRegistros() {
+        List<PetRegistro> registros = new ArrayList<>();
+
+        for (String path : leitor.listOfPaths()) {
+            registros.add(new PetRegistro(pathToPet(path), path));
+        }
+        return registros;
     }
 
     public List<Pet> listaDePets() {
-
-        List<String> listaPaths = leitor.listOfPaths();
-        List<Pet> listaPets = new ArrayList<>();
-
-        for (String listaPath : listaPaths) {
-            List<String> strings = leitor.fileToString(listaPath);
-            Pet pet = leitor.listOfPetsOutput(strings);
-            listaPets.add(pet);
-        }
-        return listaPets;
+        return listaDeRegistros().stream()
+                .map(PetRegistro::pet)
+                .toList();
     }
 
     public void listarPets() {
@@ -66,18 +69,35 @@ public class PetRepository {
                 || contem(endereco.getCidade(), busca);
     }
 
-    public List<Pet> buscaPet(PetDto f) {
-        List<Pet> list = listaDePets();
-
-        return list.stream()
-                .filter(p -> f.getNome() == null || contem(p.getNome(), f.getNome())
-                        || contem(p.getSobrenome(), f.getNome()))
-                .filter(p -> f.getTipo() == null || p.getTipo() == f.getTipo())
-                .filter(p -> f.getSexo() == null || p.getSexo() == f.getSexo())
-                .filter(p -> f.getIdade() == null || p.getIdade().equals(f.getIdade()))
-                .filter(p -> f.getPeso() == null || p.getPeso().equals(f.getPeso()))
-                .filter(p -> f.getRaca() == null || contem(p.getRaca(), f.getRaca()))
-                .filter(p -> f.getEndereco() == null || contemEndereco(p.getEndereco(), f.getEndereco()))
+    public List<PetRegistro> buscaPet(PetDto f) {
+        return listaDeRegistros().stream()
+                .filter(r -> f.getNome() == null
+                        || contem(r.pet().getNome(), f.getNome())
+                        || contem(r.pet().getSobrenome(), f.getNome()))
+                .filter(r -> f.getTipo() == null || r.pet().getTipo() == f.getTipo())
+                .filter(r -> f.getSexo() == null || r.pet().getSexo() == f.getSexo())
+                .filter(r -> f.getIdade() == null || f.getIdade().equals(r.pet().getIdade()))
+                .filter(r -> f.getPeso() == null || f.getPeso().equals(r.pet().getPeso()))
+                .filter(r -> f.getRaca() == null || contem(r.pet().getRaca(), f.getRaca()))
+                .filter(r -> f.getEndereco() == null
+                        || contemEndereco(r.pet().getEndereco(), f.getEndereco()))
                 .toList();
+    }
+
+    public boolean deletePet(String path) {
+        File file = new File(path);
+        return file.isFile() && file.delete();
+    }
+
+    private Pet pathToPet(String path) {
+        List<String> linhas = leitor.fileToString(path);
+
+        if (linhas.size() < 7) {
+            throw new IllegalArgumentException(
+                    "O arquivo não contém os dados completos de um pet: " + path
+            );
+        }
+
+        return leitor.listOfPetsOutput(linhas);
     }
 }
