@@ -1,7 +1,7 @@
 package app;
 
 import controller.PetController;
-import model.Pet;
+import model.PetRegistro;
 import repository.PetRepository;
 import service.PetService;
 import util.EscritorDeArquivo;
@@ -20,7 +20,7 @@ public class Main {
 
         //-------------------------------------------------------------
 
-        List<Pet> pets = controller.buscaPet()  ;
+        List<PetRegistro> pets = controller.buscaPet();
         controller.printList(pets);
     }
 }
