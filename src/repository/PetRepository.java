@@ -7,6 +7,7 @@ import util.EscritorDeArquivo;
 import util.LeitorDeArquivo;
 import util.TextNormalizer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,5 +80,36 @@ public class PetRepository {
                 .filter(p -> f.getRaca() == null || contem(p.getRaca(), f.getRaca()))
                 .filter(p -> f.getEndereco() == null || contemEndereco(p.getEndereco(), f.getEndereco()))
                 .toList();
+    }
+
+    public void deletePet(Pet pet) {
+        String strPath = "petsCadastrados";
+        File path = new File(strPath);
+        File[] files = path.listFiles();
+        boolean isDeleted = false;
+        if (files != null) {
+            for (File file : files) {
+                if (pathToPet(file.toString()).equals(pet)) {
+                    isDeleted = file.delete();
+                }
+                if (isDeleted) {
+                    System.out.println(file.getName() + " is deleted.");
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private Pet pathToPet(String path) {
+        List<String> linhas = leitor.fileToString(path);
+
+        if (linhas.size() < 7) {
+            throw new IllegalArgumentException(
+                    "O arquivo não contém os dados completos de um pet: " + path
+            );
+        }
+
+        return leitor.listOfPetsOutput(linhas);
     }
 }

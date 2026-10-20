@@ -80,5 +80,10 @@ public class PetService {
         return repository.buscaPet(pet);
     }
 
+    public void deletePet(Pet pet) {
+        //escrever validações
+        repository.deletePet(pet);
+    }
+
 
 }

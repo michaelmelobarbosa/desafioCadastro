@@ -116,6 +116,28 @@ public class PetController {
         return service.buscaPet(pet);
     }
 
+    private void deletePet(List<Pet> pets) {
+        if (pets.isEmpty()) {
+            System.out.println("Lista Vazia. Nenhum pet para ser deletado!");
+        }
+
+        int index;
+
+        while (true) {
+            System.out.println("Digite o número do pet a ser deletado: ");
+            index = Integer.parseInt(sc.nextLine().trim());
+            if (index > 0 && index <= pets.size()) {
+                break;
+            }
+            System.out.println("opção inválida! Tente novamente.");
+        }
+
+        Pet pet = pets.get(index - 1);
+
+        service.deletePet(pet);
+
+    }
+
     private static void mostrarMenuBusca() {
         System.out.println("Escolha de 1 a 6 (máximo 2) entre os critérios abaixo: ('Tipo' é um critério obrigatório)");
         System.out.println("""

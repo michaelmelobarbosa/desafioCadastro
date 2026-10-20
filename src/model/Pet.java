@@ -107,12 +107,13 @@ public class Pet {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return Objects.equals(nome, pet.nome) && Objects.equals(idade, pet.idade) && Objects.equals(raca, pet.raca);
+        return Objects.equals(nome, pet.nome) && Objects.equals(idade, pet.idade) && Objects.equals(raca, pet.raca)
+                && Objects.equals(sexo, pet.sexo) && Objects.equals(endereco, pet.endereco);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, idade, raca);
+        return Objects.hash(nome, idade, raca, peso, sexo, endereco);
     }
 
     @Override
